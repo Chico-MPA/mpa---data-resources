@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MPA Data Resources — Chico State</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --red:       #C8102E;
+      --gold:      #E8A045;
+      --cream:     #FAF7F2;
+      --ink:       #1A1410;
+      --muted:     #6B5E52;
+      --border:    #E0D8CE;
+      --card-bg:   #FFFFFF;
+      --tag-bg:    #F3EDE5;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--ink);
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .header-accent {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--red) 0%, var(--gold) 100%);
+    }
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 52px 32px 44px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .header-text h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: #fff;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+    }
+    .header-text h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .header-text p {
+      margin-top: 12px;
+      color: #B8AFA7;
+      font-size: 0.95rem;
+      font-weight: 300;
+      max-width: 460px;
+      line-height: 1.6;
+    }
+    .header-badge {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 14px 20px;
+      text-align: right;
+    }
+    .header-badge .num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.4rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .header-badge .label {
+      font-size: 0.75rem;
+      color: #B8AFA7;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 4px;
+    }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .filter-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      overflow-x: auto;
+      padding: 12px 0;
+      scrollbar-width: none;
+    }
+    .filter-inner::-webkit-scrollbar { display: none; }
+    .filter-btn {
+      background: none;
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.18s ease;
+    }
+    .filter-btn:hover { border-color: var(--red); color: var(--red); }
+    .filter-btn.active {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff;
+    }
+
+    /* ── GRID ── */
+    .grid-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 32px 80px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      animation: fadeUp 0.4s ease both;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(26,20,16,0.08);
+    }
+    .card.hidden { display: none; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: var(--tag-bg);
+      color: var(--muted);
+    }
+
+    .card h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.05rem;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+    .card p {
+      font-size: 0.875rem;
+      line-height: 1.65;
+      color: var(--muted);
+      flex: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+    }
+    .access-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--muted);
+    }
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+    .dot.free   { background: #2E9E6A; }
+    .dot.sub    { background: #C8102E; }
+    .dot.reg    { background: #E8A045; }
+
+    .visit-btn {
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 7px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.18s ease;
+      display: inline-block;
+    }
+    .visit-btn:hover { background: var(--red); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: #B8AFA7;
+      text-align: center;
+      padding: 28px 32px;
+      font-size: 0.8rem;
+      line-height: 1.7;
+    }
+    footer strong { color: var(--gold); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .header-inner { padding: 36px 20px 32px; }
+      .grid-section { padding: 28px 16px 60px; }
+      .filter-bar { padding: 0 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-accent"></div>
+  <div class="header-inner">
+    <div class="header-text">
+      <h1>MPA <em>Data</em><br>Resources</h1>
+      <p>Curated datasets and research databases for graduate study in public administration — maintained by the Chico State MPA Program.</p>
+    </div>
+    <div class="header-badge">
+      <div class="num">10</div>
+      <div class="label">Data Sources</div>
+    </div>
+  </div>
+</header>
+
+<div class="filter-bar">
+  <div class="filter-inner">
+    <button class="filter-btn active" data-filter="all">All Sources</button>
+    <button class="filter-btn" data-filter="economics">Economics</button>
+    <button class="filter-btn" data-filter="elections">Elections & Politics</button>
+    <button class="filter-btn" data-filter="religion">Religion</button>
+    <button class="filter-btn" data-filter="health">Health & Wellbeing</button>
+    <button class="filter-btn" data-filter="policy">Policy</button>
+  </div>
+</div>
+
+<main class="grid-section">
+  <div class="grid" id="card-grid">
+
+    <!-- 1. USDA ERS -->
+    <div class="card" data-category="economics policy">
+      <div class="card-header">
+        <div class="card-icon" style="background:#FEF3E2;">🌾</div>
+        <span class="tag">Economics</span>
+      </div>
+      <h3>USDA Economic Research Service</h3>
+      <p>The USDA's primary economic research agency. Covers food security, farm income, rural economies, agricultural trade, and natural resource data across the U.S. Includes downloadable datasets, charts, and queryable applications.</p>
+      <div class="card-footer">
+        <span class="access-label"><span class="dot free"></span> Free access</span>
+        <a class="visit-btn" href="https://www.ers.usda.gov/data-products" target="_blank" rel="noopener">Visit Source →</a>
+      </div>
+    </div>
+
+    <!-- 2. Data Center Policy -->
+    <div class="card" data-category="policy">
+      <div class="card-header">
+        <div class="card-icon" style="background:#EAF3FF;">🏛️</div>
+        <span class="tag">Policy</span>
+      </div>
+      <h3>Data Center Policy Database</h3>
+      <p>A specialized database tracking policies governing data centers across the U.S. and beyond — covering energy use, land use, zoning, and regulatory frameworks. Built for policymakers, researchers, journalists, and communities.</p>
+      <div class="card-footer">
+        <span class="access-label"><span class="dot free"></span> Free access</span>
+        <a class="visit-btn" href="https://www.datacenterpolicy.com/" target="_blank" rel="noopener">Visit Source →</a>
+      </div>
+    </div>
+
+    <!-- 3. World Christian Database -->
+    <div class="card" data-category="religion">
+      <div class="card-header">
+        <div class="card-icon" style="background:#F3EDF7;">✝️</div>
+        <span class="tag">Religion</span>
+      </div>
+      <h3>World Christian Database</h3>
+      <p>Comprehensive statistical data on global Christianity and world religions across all 237 countries. Covers 9,000+ Christian denominations, 13,000 ethnolinguistic peoples, and multi-decade trend data from 1900 to 2050. Subscription-based; check library access.</p>
+      <div class="card-footer">
+        <span class="access-label"><span class="dot sub"></span> Subscription</span>
+        <a class="visit-btn" href="https://www.worldchristiandatabase.org/" target="_blank" rel="noopener">Visit Source →</a>
+      </div>
+    </div>
+
+    <!-- 4. CHIP50 -->
+    <div class="card" data-category="elections policy">
+      <div class="card-header">
+        <div class="card-icon" style="background:#E8F5EC;">🏛️</div>
+        <span class="tag">Elections & Politics</span>
+      </div>
+      <h3>Civic Health and Institutions Project (CHIP50)</h3>
+      <p>A 50-state survey project measuring civic health, trust in institutions, and democratic engagement across the United States. Produced by a research consortium, with data useful for studying civic participation, political attitudes, and local governance.</p>
+      <div class="card-footer">
+        <span class="access-label"><span class="dot free"></span> Free access</span>
+        <a class="visit-btn" href="https://www.chip50.org/" target="_blank" rel="noopener">Visit Source →</a>
+      </div>
+    </div>
+
+    <!-- 5. FFCWS -->
+    <div class="card" data-category="health policy">
+      <div class="card-header">
+        <div class="card-icon" style="background:#FEF0E2;">👪</div>
+        <span class="tag">Health & Wellbeing</span>
+      </div>
+      <h3>Future of Families & Child Wellbeing Study (FFCWS)</h3>
+      <p>The longest-running U.S. birth cohort study of its kind (Princeton/Columbia), following ~4,900 children from birth through young adulthood since 1998. Covers family structure, income, health, housing, and child development. Used by 9,600+ researchers. Free with registration.</p>
+      <div class="card-footer">
+        <span class="access-label"><span class="dot reg"></span> Registration required</span>
+        <a class="visit-btn" href="https://ffcws.princeton.edu/" target="_blank" rel="noopener">Visit Source →</a>
+      </div>
+    </div>
+
+    <!-- 6. F&M Global Barometers -->
+    <div class="card" data-category="elections religion">
+      <div class="card-header">
+        <div class="card-icon" style="background:#E8F0FE;">🌍</div>
+        <span class="tag">Elections & Politics</span>
+      </div>
+      <h3>F&M Global Barometers</h3>
+      <p>Cross-national survey data on political attitudes, social values, and public opinion in over 130 countries. Notable for the LGBTQI+ Perception Index covering 200,000+ respondents globally. Useful for comparative public policy and international affairs research.</p>
+      <div class="card-footer">
+        <span class="access-label"><span class="dot free"></span> Free access</span>
+        <a class="visit-btn" href="https://www.fandmglobalbarometers.org/" target="_blank" rel="noopener">Visit Source →</a>
+      </div>
+    </div>
+
+    <!-- 7. Pew Research -->
+    <div class="card" data-category="elections religion health policy">
+      <div class="card-header">
+        <div class="card-icon" style="background:#FFF0F0;">📊</div>
+        <span class="tag">Elections & Politics</span>
+      </div>
+      <h3>Pew Research Center Datasets</h3>
+      <p>Public-use microdata from one of the most cited nonpartisan research organizations in the U.S. Covers American politics, religion, social trends, global attitudes, and media. Includes the American Trends Panel (ATP) and Religious Landscape Study. Free with account creation.</p>
+      <div class="card-footer">
+        <span class="access-label"><span class="dot reg"></span> Free account required</span>
+        <a class="visit-btn" href="https://www.pewresearch.org/datasets/" target="_blank" rel="noopener">Visit Source →</a>
+      </div>
+    </div>
+
+    <!-- 8. ANES -->
+    <div class="card" data-category="elections">
+      <div class="card-header">
+        <div class="card-icon" style="background:#E8F5EC;">🗳️</div>
+        <span class="tag">Elections & Politics</span>
+      </div>
+      <h3>American National Election Studies (ANES)</h3>
+      <p>The gold-standard academic survey of U.S. voters, conducted before and after every presidential election since 1948. Covers political participation, candidate evaluations, ideology, and social identity. Includes a cumulative time-series file spanning 1948–2024. Free with registration.</p>
+      <div class="card-footer">
+        <span class="access-label"><span class="dot reg"></span> Registration required</span>
+        <a class="visit-btn" href="https://electionstudies.org/data-center/" target="_blank" rel="noopener">Visit Source →</a>
+      </div>
+    </div>
+
+    <!-- 9. CES / Cooperative Election Study -->
+    <div class="card" data-category="elections">
+      <div class="card-header">
+        <div class="card-icon" style="background:#EAF3FF;">🗳️</div>
+        <span class="tag">Elections & Politics</span>
+      </div>
+      <h3>Cooperative Election Study (CES)</h3>
+      <p>A large-scale annual survey (50,000+ respondents) run by a consortium of universities and coordinated at Harvard/Tufts. Covers voting behavior, policy preferences, and congressional representation. Excellent for subnational and district-level political analysis. Free download.</p>
+      <div class="card-footer">
+        <span class="access-label"><span class="dot free"></span> Free access</span>
+        <a class="visit-btn" href="https://tischcollege.tufts.edu/research-faculty/research-centers/cooperative-election-study" target="_blank" rel="noopener">Visit Source →</a>
+      </div>
+    </div>
+
+    <!-- 10. CHIS -->
+    <div class="card" data-category="health">
+      <div class="card-header">
+        <div class="card-icon" style="background:#FEF3E2;">🏥</div>
+        <span class="tag">Health & Wellbeing</span>
+      </div>
+      <h3>California Health Interview Survey (CHIS)</h3>
+      <p>The nation's largest state health survey, administered by UCLA's Center for Health Policy Research. Provides critical data on Californians' health status, behaviors, and access to care — with robust breakdowns by race, ethnicity, income, and region. Especially valuable for California-focused MPA research.</p>
+      <div class="card-footer">
+        <span class="access-label"><span class="dot free"></span> Free access</span>
+        <a class="visit-btn" href="https://healthpolicy.ucla.edu/our-work/california-health-interview-survey-chis" target="_blank" rel="noopener">Visit Source →</a>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+</main>
+
+<footer>
+  <p>Maintained by the <strong>Chico State MPA Program</strong> · California State University, Chico</p>
+  <p style="margin-top:6px; font-size:0.75rem;">For questions or to suggest a data source, contact the MPA program office.</p>
+</footer>
+
+<script>
+  const buttons = document.querySelectorAll('.filter-btn');
+  const cards   = document.querySelectorAll('.card');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filter = btn.dataset.filter;
+      cards.forEach((card, i) => {
+        const cats = card.dataset.category || '';
+        const show = filter === 'all' || cats.includes(filter);
+        card.classList.toggle('hidden', !show);
+        if (show) card.style.animationDelay = (i * 0.04) + 's';
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
