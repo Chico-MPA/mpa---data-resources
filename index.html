@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MPA Data Resources  California State University, Chico</title>
+  <title>MPA Data Resources — California State University, Chico</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -16,18 +16,13 @@
       --card-bg:   #FFFFFF;
       --tag-bg:    #F3EDE5;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body 
-    <div style="height: 100px; width: 100%; background: linear-gradient(to right, #1a3a4a, #8B6914, #D4AF37, #F5D76E, #FFF0A0, #F5D76E, #D4AF37, #8B6914, #1a3a4a);"></div>
-    {
+    body {
       font-family: 'DM Sans', sans-serif;
       background: var(--cream);
       color: var(--ink);
       min-height: 100vh;
     }
-
     /* ── HEADER ── */
     header {
       background: var(--ink);
@@ -90,7 +85,6 @@
       letter-spacing: 0.08em;
       margin-top: 4px;
     }
-
     /* ── FILTER BAR ── */
     .filter-bar {
       background: #fff;
@@ -130,7 +124,40 @@
       border-color: var(--red);
       color: #fff;
     }
+  </style>
+</head>
+<body>
 
+  <!-- shimmer line at very top of page -->
+  <div style="height: 5px; width: 100%; background: linear-gradient(to right, #1a3a4a, #8B6914, #D4AF37, #F5D76E, #FFF0A0, #F5D76E, #D4AF37, #8B6914, #1a3a4a);"></div>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-text">
+        <h1>MPA <em>Data</em><br>Resources</h1>
+        <p>Curated datasets and research databases for graduate study in public administration — maintained by the Chico State MPA Program.</p>
+      </div>
+      <div class="header-badge">
+        <div style="display: flex; align-items: center; gap: 10px; justify-content: flex-end;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/>
+            <line x1="12" y1="2" x2="12" y2="4"/>
+            <line x1="12" y1="20" x2="12" y2="22"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="2" y1="12" x2="4" y2="12"/>
+            <line x1="20" y1="12" x2="22" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <div class="num">25</div>
+        </div>
+        <div class="label">Data Sources</div>
+      </div>
+    </div>
+    <!-- shimmer line at bottom of header -->
+    <div style="height: 5px; width: 100%; background: linear-gradient(to right, #1a3a4a, #8B6914, #D4AF37, #F5D76E, #FFF0A0, #F5D76E, #D4AF37, #8B6914, #1a3a4a);"></div>
+  </header>
     /* ── GRID ── */
     .grid-section {
       max-width: 1100px;
